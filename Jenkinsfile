@@ -2,13 +2,14 @@ pipeline {
     agent {
 	docker {
 		label 'cms-dmwm-el9-01'
-		image 'node:20.11.1-alpine3.19' }
+		image 'node:20.12.2'
+	}
     }
     stages {
         stage('Test') {
-            steps {
-                sh 'node --version'
-            }
+		steps {
+			sh 'node --version'
+		}
         }
     }
 }
