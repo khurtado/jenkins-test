@@ -5,19 +5,19 @@ pipeline {
 
     environment {
         MY_HOSTNAME = """${sh(
-            returnStdout: True,
-            script: 'echo $(hostname -f)'
-        )}"""
+            returnStdout: true,
+            script: 'hostname -f'
+        ).trim()}"""
 
         MY_ID = """${sh(
-            returnStdout: True,
-            script: 'echo $(id -un)'
-        )}"""
+            returnStdout: true,
+            script: 'id -un'
+        ).trim()}"""
 
         MY_GROUP = """${sh(
-            returnStdout: True,
-            script: 'echo $(id -gn)'
-        )}"""
+            returnStdout: true,
+            script: 'id -gn'
+        ).trim()}"""
 
         HOST_MOUNT_DIR = '/data/dockerMount'
         
@@ -30,9 +30,18 @@ pipeline {
     stages {
         stage('Test compose') {
             steps {
-                git 'https://github.com/d-ylee/jenkins-test'
-                sh 'docker compose up -d -f $WORKSPACE/jenkins-test/WMCore-PR-test/docker-compose.yml'
+		git branch: 'main', url: 'https://github.com/d-ylee/jenkins-test'
+		sh 'pwd'
+		sh 'ls'
+		sh 'export'
+                sh 'docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml up -d'
             }
+        }
+    }
+
+    post {
+        always {
+            sh 'docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml down'
         }
     }
 }
