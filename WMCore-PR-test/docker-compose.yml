@@ -1,0 +1,55 @@
+version: "3"
+
+services:
+  mariadb:
+    image: registry.cern.ch/cmsweb/mariadb:${MDB_TAG}
+    volumes:
+      - "/tmp:/tmp"
+      - "${HOST_MOUNT_DIR}/srv/mariadb/${MDB_TAG}/install/database:/data/srv/mariadb/current/install/database"
+      - "${HOST_MOUNT_DIR}/srv/mariadb/${MDB_TAG}/logs:/data/srv/mariadb/current/logs"
+      - "${HOST_MOUNT_DIR}/admin/mariadb:/data/admin/mariadb/"
+      - "${HOST_MOUNT_DIR}/admin/wmagent:/data/admin/wmagent/"
+      - "${HOST_MOUNT_DIR}/admin/etc/passwd:/etc/passwd:ro"
+      - "${HOST_MOUNT_DIR}/admin/etc/group:/etc/group:ro"
+      - "/etc/sudoers:/etc/sudoers:ro"
+      - "/etc/sudoers.d:/etc/sudoers.d:ro"
+    user: ${MY_ID}:${MY_GROUP}
+    hostname: ${MY_HOSTNAME}
+    expose:
+      - 3306
+
+  couchdb:
+    image: registry.cern.ch/cmsweb/wmagent-couchdb:3.2.2
+    volumes:
+      - "/tmp:/tmp"
+      - "${HOST_MOUNT_DIR}/certs:/data/certs"
+      - "${HOST_MOUNT_DIR}/srv/couchdb/${COUCH_TAG}/install:/data/srv/couchdb/current/install"
+      - "${HOST_MOUNT_DIR}/srv/couchdb/${COUCH_TAG}/logs:/data/srv/couchdb/current/logs"
+      - "${HOST_MOUNT_DIR}/srv/couchdb/${COUCH_TAG}/state:/data/srv/couchdb/current/state"
+      - "${HOST_MOUNT_DIR}/srv/couchdb/${COUCH_TAG}/config:/data/srv/couchdb/current/config"
+      - "${HOST_MOUNT_DIR}/admin/wmagent:/data/admin/wmagent/"
+      - "${HOST_MOUNT_DIR}/admin/couchdb:/data/admin/couchdb/"
+      - "${HOST_MOUNT_DIR}/admin/etc/passwd:/etc/passwd:ro"
+      - "${HOST_MOUNT_DIR}/admin/etc/group:/etc/group:ro"
+      - "/etc/sudoers:/etc/sudoers:ro"
+      - "/etc/sudoers.d:/etc/sudoers.d:ro"
+    user: ${MY_ID}:${MY_GROUP}
+    expose:
+      - 5984
+
+  wmagent:
+    image: registry.cern.ch/cmsweb/wmagent:latest
+    volumes:
+      - "/etc/condor:/etc/condor:ro"
+      - "/tmp:/tmp"
+      - "${HOST_MOUNT_DIR}/certs:/data/certs"
+      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/install:/data/srv/wmagent/current/install"
+      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/logs:/data/srv/wmagent/current/logs"
+      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/state:/data/srv/wmagent/current/state"
+      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/config:/data/srv/wmagent/current/config"
+      - "${HOST_MOUNT_DIR}/admin/wmagent:/data/admin/wmagent/"
+      - "${HOST_MOUNT_DIR}/admin/etc/passwd:/etc/passwd:ro"
+      - "${HOST_MOUNT_DIR}/admin/etc/group:/etc/group:ro"
+      - "/etc/sudoers:/etc/sudoers:ro"
+      - "/etc/sudoers.d:/etc/sudoers.d:ro"
+    user: ${MY_ID}:${MY_GROUP}
