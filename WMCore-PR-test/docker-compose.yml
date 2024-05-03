@@ -7,8 +7,8 @@ services:
       - "${HOST_MOUNT_DIR}/srv/mariadb/${MDB_TAG}/logs:/data/srv/mariadb/current/logs"
       - "${HOST_MOUNT_DIR}/admin/mariadb:/data/admin/mariadb/"
       - "${HOST_MOUNT_DIR}/admin/wmagent:/data/admin/wmagent/"
-      - "${HOST_MOUNT_DIR}/admin/etc/passwd:/etc/passwd:ro"
-      - "${HOST_MOUNT_DIR}/admin/etc/group:/etc/group:ro"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/group:/etc/group:ro"
       - "/etc/sudoers:/etc/sudoers:ro"
       - "/etc/sudoers.d:/etc/sudoers.d:ro"
     user: ${MY_ID}:${MY_GROUP}
@@ -27,8 +27,8 @@ services:
       - "${HOST_MOUNT_DIR}/srv/couchdb/${COUCH_TAG}/config:/data/srv/couchdb/current/config"
       - "${HOST_MOUNT_DIR}/admin/wmagent:/data/admin/wmagent/"
       - "${HOST_MOUNT_DIR}/admin/couchdb:/data/admin/couchdb/"
-      - "${HOST_MOUNT_DIR}/admin/etc/passwd:/etc/passwd:ro"
-      - "${HOST_MOUNT_DIR}/admin/etc/group:/etc/group:ro"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/group:/etc/group:ro"
       - "/etc/sudoers:/etc/sudoers:ro"
       - "/etc/sudoers.d:/etc/sudoers.d:ro"
     user: ${MY_ID}:${MY_GROUP}
@@ -46,8 +46,11 @@ services:
       - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/state:/data/srv/wmagent/current/state"
       - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/config:/data/srv/wmagent/current/config"
       - "${HOST_MOUNT_DIR}/admin/wmagent:/data/admin/wmagent/"
-      - "${HOST_MOUNT_DIR}/admin/etc/passwd:/etc/passwd:ro"
-      - "${HOST_MOUNT_DIR}/admin/etc/group:/etc/group:ro"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/group:/etc/group:ro"
       - "/etc/sudoers:/etc/sudoers:ro"
       - "/etc/sudoers.d:/etc/sudoers.d:ro"
     user: ${MY_ID}:${MY_GROUP}
+    depends_on:
+      - mariadb
+      - couchdb

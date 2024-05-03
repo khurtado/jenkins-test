@@ -11,12 +11,12 @@ pipeline {
 
         MY_ID = """${sh(
             returnStdout: true,
-            script: 'id -un'
+            script: 'id -u'
         ).trim()}"""
 
         MY_GROUP = """${sh(
             returnStdout: true,
-            script: 'id -gn'
+            script: 'id -g'
         ).trim()}"""
 
         HOST_MOUNT_DIR = "${env.WORKSPACE}"
@@ -31,9 +31,6 @@ pipeline {
         stage('Test compose') {
             steps {
                 git branch: 'main', url: 'https://github.com/d-ylee/jenkins-test'
-                sh '$WORKSPACE/WMCore-PR-test/setup-users.sh'
-                sh 'cat $HOST_MOUNT_DIR/admin/etc/passwd'
-                sh 'cat $HOST_MOUNT_DIR/admin/etc/group'
                 sh 'docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml up -d'
             }
         }
