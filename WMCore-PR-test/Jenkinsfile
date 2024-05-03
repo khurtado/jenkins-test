@@ -19,7 +19,7 @@ pipeline {
             script: 'id -gn'
         ).trim()}"""
 
-        HOST_MOUNT_DIR = '/data/dockerMount'
+        HOST_MOUNT_DIR = "${env.WORKSPACE}"
         
         WMA_TAG = '2.3.3'
         COUCH_TAG = '3.2.2'
@@ -30,10 +30,10 @@ pipeline {
     stages {
         stage('Test compose') {
             steps {
-		git branch: 'main', url: 'https://github.com/d-ylee/jenkins-test'
-		sh 'pwd'
-		sh 'ls'
-		sh 'export'
+                git branch: 'main', url: 'https://github.com/d-ylee/jenkins-test'
+                sh '$WORKSPACE/WMCore-PR-test/setup-users.sh'
+                sh 'cat $HOST_MOUNT_DIR/admin/etc/passwd'
+                sh 'cat $HOST_MOUNT_DIR/admin/etc/group'
                 sh 'docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml up -d'
             }
         }
