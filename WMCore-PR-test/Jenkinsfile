@@ -1,0 +1,38 @@
+pipeline {
+    agent {
+        label 'cms-dmwm-el9-01'
+    }
+
+    environment {
+        MY_HOSTNAME = """${sh(
+            returnStdout: True,
+            script: 'echo $(hostname -f)'
+        )}"""
+
+        MY_ID = """${sh(
+            returnStdout: True,
+            script: 'echo $(id -un)'
+        )}"""
+
+        MY_GROUP = """${sh(
+            returnStdout: True,
+            script: 'echo $(id -gn)'
+        )}"""
+
+        HOST_MOUNT_DIR = '/data/dockerMount'
+        
+        WMA_TAG = '2.3.3'
+        COUCH_TAG = '3.2.2'
+        MDB_TAG = '10.6.5'
+
+    }
+
+    stages {
+        stage('Test compose') {
+            steps {
+                git 'https://github.com/d-ylee/jenkins-test'
+                sh 'docker compose up -d -f $WORKSPACE/jenkins-test/WMCore-PR-test/docker-compose.yml'
+            }
+        }
+    }
+}

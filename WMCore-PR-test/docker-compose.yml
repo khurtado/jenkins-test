@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   mariadb:
     image: registry.cern.ch/cmsweb/mariadb:${MDB_TAG}
@@ -19,7 +17,7 @@ services:
       - 3306
 
   couchdb:
-    image: registry.cern.ch/cmsweb/wmagent-couchdb:3.2.2
+    image: registry.cern.ch/cmsweb/wmagent-couchdb:${COUCH_TAG}
     volumes:
       - "/tmp:/tmp"
       - "${HOST_MOUNT_DIR}/certs:/data/certs"
@@ -38,7 +36,7 @@ services:
       - 5984
 
   wmagent:
-    image: registry.cern.ch/cmsweb/wmagent:latest
+    image: registry.cern.ch/cmsweb/wmagent:${WMA_TAG}
     volumes:
       - "/etc/condor:/etc/condor:ro"
       - "/tmp:/tmp"
