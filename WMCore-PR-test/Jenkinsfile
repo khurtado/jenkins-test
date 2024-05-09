@@ -31,14 +31,15 @@ pipeline {
         stage('Test compose') {
             steps {
                 git branch: 'main', url: 'https://github.com/d-ylee/jenkins-test'
-                sh 'docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml up -d'
+                sh 'docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml up -d wmagent-unittest'
+                sh 'docker compose exec wmagent-unittest "/bin/bash /home/dmwm/TestScripts/pylintWMCore.sh"'
             }
         }
     }
 
     post {
         always {
-            sh 'docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml ls'
+            sh 'docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml down'
         }
     }
 }
