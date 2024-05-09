@@ -38,7 +38,7 @@ pipeline {
 
     post {
         always {
-            sh 'docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml down'
+            sh 'docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml ls'
         }
     }
 }
