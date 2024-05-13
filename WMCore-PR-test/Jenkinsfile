@@ -32,7 +32,7 @@ pipeline {
             steps {
                 git branch: 'main', url: 'https://github.com/d-ylee/jenkins-test'
                 sh 'docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml up -d wmagent-unittest'
-                sh 'docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml exec wmagent-unittest "/bin/bash /home/dmwm/TestScripts/pylintWMCore.sh"'
+                sh 'docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml exec wmagent-unittest "/home/dmwm/TestScripts/pylintWMCore.sh"'
             }
         }
     }
