@@ -57,6 +57,3 @@ services:
   
   wmagent-unittest:
     image: gitlab-registry.cern.ch/cmsdocks/dmwm:wmcorepy3_tests
-    depends_on:
-      - mariadb
-      - couchdb
