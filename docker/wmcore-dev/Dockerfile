@@ -37,12 +37,6 @@ RUN sed '/gfal2/d' /home/cmsbld/WMCore/requirements.txt > /home/cmsbld/WMCore/re
 RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel && \
     pip3 install --no-cache-dir --ignore-installed -r /home/cmsbld/WMCore/requirements-dev.txt
 
-ENV DATABASE=mysql://unittestagent@mariadb/wmcore_unittest
-ENV COUCHURL=http://unittestagent:passwd@couchdb:6994
-ENV DIALECT=MySQL
-ENV PYTHONPATH=/home/cmsbld/WMCore/test/python:$PYTHONPATH
-ENV PYTHONPATH=/home/cmsbld/WMCore/src/python:$PYTHONPATH
-
 ADD TestScripts /home/cmsbld/TestScripts
 
 ENTRYPOINT ["sleep", "infinity"]

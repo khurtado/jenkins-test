@@ -59,3 +59,12 @@ services:
     image: gitlab-registry.cern.ch/cmsdocks/dmwm:wmcorepy3_tests
     tty: true
     entrypoint: ["/bin/sh"]
+    volumes:
+      - "${WORKSPACE}/artifacts/:/home/dmwm/artifacts/:Z"
+
+  wmagent-dev:
+    image: registry.cern.ch/cmsweb/wmcore-dev:latest
+    tty: true
+    depends_on:
+      - mariadb
+      - couchdb
