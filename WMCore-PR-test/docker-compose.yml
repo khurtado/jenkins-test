@@ -13,8 +13,9 @@ services:
       - "/etc/sudoers.d:/etc/sudoers.d:ro"
     user: ${MY_ID}:${MY_GROUP}
     hostname: ${MY_HOSTNAME}
-    expose:
-      - 3306
+    network_mode: host
+    # expose:
+    #   - 3306
 
   couchdb:
     image: registry.cern.ch/cmsweb/wmagent-couchdb:${COUCH_TAG}
@@ -32,8 +33,9 @@ services:
       - "/etc/sudoers:/etc/sudoers:ro"
       - "/etc/sudoers.d:/etc/sudoers.d:ro"
     user: ${MY_ID}:${MY_GROUP}
-    expose:
-      - 5984
+    network_mode: host
+    # expose:
+    #   - 5984
 
   wmagent:
     image: registry.cern.ch/cmsweb/wmagent:${WMA_TAG}
@@ -51,6 +53,7 @@ services:
       - "/etc/sudoers:/etc/sudoers:ro"
       - "/etc/sudoers.d:/etc/sudoers.d:ro"
     user: ${MY_ID}:${MY_GROUP}
+    network_mode: host
     depends_on:
       - mariadb
       - couchdb
@@ -59,12 +62,27 @@ services:
     image: gitlab-registry.cern.ch/cmsdocks/dmwm:wmcorepy3_tests
     tty: true
     entrypoint: ["/bin/sh"]
+    network_mode: host
     volumes:
       - "${WORKSPACE}/artifacts/:/home/dmwm/artifacts/:Z"
 
   wmagent-dev:
     image: registry.cern.ch/cmsweb/wmcore-dev:latest
     tty: true
+    volumes:
+      - "/etc/condor:/etc/condor:ro"
+      - "/tmp:/tmp"
+      - "${HOST_MOUNT_DIR}/certs:/data/certs"
+      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/install:/data/srv/wmagent/current/install"
+      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/logs:/data/srv/wmagent/current/logs"
+      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/state:/data/srv/wmagent/current/state"
+      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/config:/data/srv/wmagent/current/config"
+      - "${HOST_MOUNT_DIR}/admin/wmagent:/data/admin/wmagent/"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/group:/etc/group:ro"
+      - "/etc/sudoers:/etc/sudoers:ro"
+      - "/etc/sudoers.d:/etc/sudoers.d:ro"
+    network_mode: host
     depends_on:
       - mariadb
       - couchdb

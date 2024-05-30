@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'cms-dmwm-el9-01'
+        label 'cms-dmwm-el9-10'
     }
 
     environment {
@@ -28,18 +28,19 @@ pipeline {
     }
 
     stages {
-        stage('Test compose') {
+        stage('Setup') {
             steps {
                 git branch: 'main', url: 'https://github.com/d-ylee/jenkins-test'
+                sh '''
+                   echo "Setting up workspace directories"
+                   $WORKSPACE/WMCore-PR-test/setup-env.sh
+                   '''
+            }
+        }
+        stage('Start Services') {
+            steps {
                 sh ''' 
-                   mkdir -p $WORKSPACE/admin/wmagent $WORKSPACE/admin/mariadb $WORKSPACE/certs
-                   cp /home/cmsbld/.globus/dmwm-config.tmpl $WORKSPACE/admin/wmagent/WMAgent.secrets
-                   cp /home/cmsbld/.globus/dmwm-mariadb.tmpl $WORKSPACE/admin/mariadb/MariaDB.secrets
-                   cp /home/cmsbld/.globus/*.pem $WORKSPACE/certs
-                   sed -i 's/6994/5984/g' $WORKSPACE/admin/wmagent/WMAgent.secrets
-                   sed -i 's/COUCH_HOST=0\.0\.0\.0/COUCH_HOST=couchdb/g' $WORKSPACE/admin/wmagent/WMAgent.secrets
-                   docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml up -d wmagent-dev
-                   docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml exec wmagent-dev "/home/dmwm/TestScripts/pylintWMCore.sh"
+                   docker compose -f $WORKSPACE/WMCore-PR-test/docker-compose.yml up --quiet-pull -d wmagent-dev
                    '''
             }
         }
