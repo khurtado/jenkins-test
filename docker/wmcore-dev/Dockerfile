@@ -38,5 +38,11 @@ RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel && \
     pip3 install --no-cache-dir --ignore-installed -r /home/cmsbld/WMCore/requirements-dev.txt
 
 ADD TestScripts /home/cmsbld/TestScripts
+ADD ContainerScripts /home/cmsbld/ContainerScripts
+
+ENV X509_HOST_CERT=/data/certs/servicecert.pem
+ENV X509_HOST_KEY=/data/certs/servicekey.pem
+ENV X509_USER_CERT=/data/certs/servicecert.pem
+ENV X509_USER_KEY=/data/certs/servicekey.pem
 
 ENTRYPOINT ["sleep", "infinity"]

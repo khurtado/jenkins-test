@@ -32,4 +32,6 @@ cat `which pep8` >> ../pep8
 chmod +x ../pep8
 
 # Run PEP-8 checker but not in pylint format
-../pep8 --format=default --exclude=test/data,.svn,CVS,.bzr,.hg,.git,__pycache__,.tox.
+pycodestyle --format=default --exclude=test/data,.svn,CVS,.bzr,.hg,.git,__pycache__,.tox.
+
+cp ${PEP8_FILENAME} ${HOME}/artifacts/
