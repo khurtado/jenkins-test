@@ -1,88 +1,71 @@
+x-common: &common-service
+  user: ${MY_ID}:${MY_GROUP}
+  network_mode: "host"
+
+x-volumes: &service-volumes
+  volumes:
+    - &wma-admin "${HOST_MOUNT_DIR}/admin/wmagent:/data/admin/wmagent/"
+    - &passwd "/etc/passwd:/etc/passwd:ro"
+    - &group "/etc/group:/etc/group:ro"
+    - &sudoers "/etc/sudoers:/etc/sudoers:ro"
+    - &sudoersd "/etc/sudoers.d:/etc/sudoers.d:ro"
+    - &certs "${HOST_MOUNT_DIR}/certs:/data/certs"
+
 services:
   mariadb:
+    <<: *common-service
     image: registry.cern.ch/cmsweb/mariadb:${MDB_TAG}
     volumes:
       - "/tmp:/tmp"
       - "${HOST_MOUNT_DIR}/srv/mariadb/${MDB_TAG}/install/database:/data/srv/mariadb/current/install/database"
       - "${HOST_MOUNT_DIR}/srv/mariadb/${MDB_TAG}/logs:/data/srv/mariadb/current/logs"
       - "${HOST_MOUNT_DIR}/admin/mariadb:/data/admin/mariadb/"
-      - "${HOST_MOUNT_DIR}/admin/wmagent:/data/admin/wmagent/"
-      - "/etc/passwd:/etc/passwd:ro"
-      - "/etc/group:/etc/group:ro"
-      - "/etc/sudoers:/etc/sudoers:ro"
-      - "/etc/sudoers.d:/etc/sudoers.d:ro"
-    user: ${MY_ID}:${MY_GROUP}
+      - *wma-admin
+      - *passwd
+      - *group
+      - *sudoers
+      - *sudoersd
     hostname: ${MY_HOSTNAME}
-    network_mode: host
-    # expose:
-    #   - 3306
 
   couchdb:
+    <<: *common-service
     image: registry.cern.ch/cmsweb/wmagent-couchdb:${COUCH_TAG}
     volumes:
       - "/tmp:/tmp"
-      - "${HOST_MOUNT_DIR}/certs:/data/certs"
+      - *certs
       - "${HOST_MOUNT_DIR}/srv/couchdb/${COUCH_TAG}/install:/data/srv/couchdb/current/install"
       - "${HOST_MOUNT_DIR}/srv/couchdb/${COUCH_TAG}/logs:/data/srv/couchdb/current/logs"
       - "${HOST_MOUNT_DIR}/srv/couchdb/${COUCH_TAG}/state:/data/srv/couchdb/current/state"
       - "${HOST_MOUNT_DIR}/srv/couchdb/${COUCH_TAG}/config:/data/srv/couchdb/current/config"
-      - "${HOST_MOUNT_DIR}/admin/wmagent:/data/admin/wmagent/"
       - "${HOST_MOUNT_DIR}/admin/couchdb:/data/admin/couchdb/"
-      - "/etc/passwd:/etc/passwd:ro"
-      - "/etc/group:/etc/group:ro"
-      - "/etc/sudoers:/etc/sudoers:ro"
-      - "/etc/sudoers.d:/etc/sudoers.d:ro"
-    user: ${MY_ID}:${MY_GROUP}
-    network_mode: host
-    # expose:
-    #   - 5984
+      - *wma-admin
+      - *passwd
+      - *group
+      - *sudoers
+      - *sudoersd
 
-  wmagent:
+  wmagent: &wma-base
+    <<: *common-service
     image: registry.cern.ch/cmsweb/wmagent:${WMA_TAG}
     volumes:
       - "/etc/condor:/etc/condor:ro"
       - "/tmp:/tmp"
-      - "${HOST_MOUNT_DIR}/certs:/data/certs"
+      - *certs
       - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/install:/data/srv/wmagent/current/install"
       - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/logs:/data/srv/wmagent/current/logs"
       - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/state:/data/srv/wmagent/current/state"
       - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/config:/data/srv/wmagent/current/config"
-      - "${HOST_MOUNT_DIR}/admin/wmagent:/data/admin/wmagent/"
-      - "/etc/passwd:/etc/passwd:ro"
-      - "/etc/group:/etc/group:ro"
-      - "/etc/sudoers:/etc/sudoers:ro"
-      - "/etc/sudoers.d:/etc/sudoers.d:ro"
-    user: ${MY_ID}:${MY_GROUP}
-    network_mode: host
+      - *wma-admin
+      - *passwd
+      - *group
+      - *sudoers
+      - *sudoersd
     depends_on:
       - mariadb
       - couchdb
   
-  wmagent-unittest:
-    image: gitlab-registry.cern.ch/cmsdocks/dmwm:wmcorepy3_tests
-    tty: true
-    entrypoint: ["/bin/sh"]
-    network_mode: host
-    volumes:
-      - "${WORKSPACE}/artifacts/:/home/dmwm/artifacts/:Z"
-
   wmagent-dev:
+    <<: *wma-base
     image: registry.cern.ch/cmsweb/wmcore-dev:latest
     tty: true
-    volumes:
-      - "/etc/condor:/etc/condor:ro"
-      - "/tmp:/tmp"
-      - "${HOST_MOUNT_DIR}/certs:/data/certs"
-      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/install:/data/srv/wmagent/current/install"
-      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/logs:/data/srv/wmagent/current/logs"
-      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/state:/data/srv/wmagent/current/state"
-      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/config:/data/srv/wmagent/current/config"
-      - "${HOST_MOUNT_DIR}/admin/wmagent:/data/admin/wmagent/"
-      - "/etc/passwd:/etc/passwd:ro"
-      - "/etc/group:/etc/group:ro"
-      - "/etc/sudoers:/etc/sudoers:ro"
-      - "/etc/sudoers.d:/etc/sudoers.d:ro"
-    network_mode: host
-    depends_on:
-      - mariadb
-      - couchdb
+    user: cmsbld

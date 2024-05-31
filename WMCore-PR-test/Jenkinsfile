@@ -34,6 +34,9 @@ pipeline {
                 sh '''
                    echo "Setting up workspace directories"
                    $WORKSPACE/WMCore-PR-test/setup-env.sh
+                   ls $WORKSPACE
+                   echo "python3 version"
+                   python3 --version
                    '''
             }
         }
