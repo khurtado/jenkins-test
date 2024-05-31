@@ -68,4 +68,3 @@ services:
     <<: *wma-base
     image: registry.cern.ch/cmsweb/wmcore-dev:latest
     tty: true
-    user: cmsbld
