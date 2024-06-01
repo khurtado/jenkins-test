@@ -39,10 +39,11 @@ RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel && \
 
 ADD TestScripts /home/cmsbld/TestScripts
 ADD ContainerScripts /home/cmsbld/ContainerScripts
+ADD entrypoint.sh /entrypoint.sh
 
 ENV X509_HOST_CERT=/data/certs/servicecert.pem
 ENV X509_HOST_KEY=/data/certs/servicekey.pem
 ENV X509_USER_CERT=/data/certs/servicecert.pem
 ENV X509_USER_KEY=/data/certs/servicekey.pem
 
-ENTRYPOINT ["sleep", "infinity"]
+ENTRYPOINT ["/entrypoint.sh"]
