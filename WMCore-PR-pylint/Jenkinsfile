@@ -28,6 +28,8 @@ pipeline {
         ghprbPullId = '11995'
         ghprbTargetBranch = 'master'
 
+        TEST_SERVICE = 'wmcore-pr-pylint'
+
     }
 
     stages {
@@ -46,8 +48,8 @@ pipeline {
         stage('Run pylint tests') {
             steps {
                 sh ''' 
-                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d wmcore-pr-pylint
-                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec wmcore-pr-test /home/cmsbld/ContainerScripts/pylintTest.sh
+                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d $TEST_SERVICE
+                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec $TEST_SERVICE /home/cmsbld/ContainerScripts/pylintTest.sh
                    '''
             }
         }
