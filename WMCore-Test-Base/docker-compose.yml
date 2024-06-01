@@ -65,6 +65,7 @@ services:
       - couchdb
   
   wmcore-pr-pylint:
+    <<: *common-service
     image: registry.cern.ch/cmsweb/wmcore-dev:latest
     tty: true
     network_mode: "host"
@@ -72,4 +73,8 @@ services:
       ghprbPullId: ${ghprbPullId}
       ghprbTargetBranch: ${ghprbTargetBranch}
     volumes:
+      - *passwd
+      - *group
+      - *sudoers
+      - *sudoersd
       - "${HOST_MOUNT_DIR}/artifacts/:/home/cmsbld/artifacts/:Z"

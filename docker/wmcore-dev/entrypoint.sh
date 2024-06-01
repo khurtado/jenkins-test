@@ -1,5 +1,5 @@
 #!/bin/bash
 
-chown -R cmsbld:cmsbd /home/cmsbld
+chown -R cmsbld:cmsbld /home/cmsbld
 
 su - cmsbld
