@@ -11,7 +11,7 @@ echo "Executing Pylint for PR ID $ghprbPullId and target branch $ghprbTargetBran
 
 # Setup the environment
 echo "Sourcing a python3 unittest environment"
-source env_unittest_py3.sh
+source $WORKDIR/TestScripts/env_unittest.sh
 JSON_FILENAME=pylintpy3Report.json
 PEP8_FILENAME=pep8py3.txt
 

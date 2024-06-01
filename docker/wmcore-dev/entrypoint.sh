@@ -1,5 +1,8 @@
 #!/bin/bash
 
-chown -R cmsbld:cmsbld /home/cmsbld
+# give proper permissions to
+chown -R ${MY_ID}:${MY_GROUP} /home/cmsbld
 
-su - cmsbld
+su - $(id -un ${MY_ID})
+
+$@

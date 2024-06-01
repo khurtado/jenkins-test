@@ -65,13 +65,15 @@ services:
       - couchdb
   
   wmcore-pr-pylint:
-    <<: *common-service
     image: registry.cern.ch/cmsweb/wmcore-dev:latest
     tty: true
     network_mode: "host"
     environment:
-      ghprbPullId: ${ghprbPullId}
-      ghprbTargetBranch: ${ghprbTargetBranch}
+      - ghprbPullId=${ghprbPullId}
+      - ghprbTargetBranch=${ghprbTargetBranch}
+      - MY_ID
+      - MY_GROUP
+    command: ["/bin/bash"]
     volumes:
       - *passwd
       - *group
