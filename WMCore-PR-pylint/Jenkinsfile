@@ -49,6 +49,9 @@ pipeline {
             steps {
                 sh ''' 
                    docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d $TEST_SERVICE
+                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE bash -c "ls -al"
+                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE bash -c "id"
+                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE bash -c "cd WMCore && git pull"
                    docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE /home/cmsbld/ContainerScripts/pylintTest.sh
                    '''
             }
@@ -64,6 +67,7 @@ pipeline {
                                followSymlinks: false,
                                fingerprint: true,
                                onlyIfSuccessful: true
+            cleanWs()
         }
     }
 }
