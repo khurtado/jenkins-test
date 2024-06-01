@@ -55,7 +55,13 @@ pipeline {
 
     post {
         always {
-            sh 'docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml down'
+            sh '''
+               docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml down --rmi all --remove-orphans
+               '''
+            archiveArtifacts artifacts: 'artifacts/*.json, artifacts/pep*.txt',
+                               followSymlinks: false,
+                               fingerprint: true,
+                               onlyIfSuccessful: true
         }
     }
 }
