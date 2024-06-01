@@ -8,6 +8,10 @@ mkdir -p $WORKSPACE/srv/couchdb/${COUCH_TAG}/state
 mkdir -p $WORKSPACE/srv/couchdb/${COUCH_TAG}/config
 mkdir -p $WORKSPACE/srv/mariadb/${MDB_TAG}/install/database
 mkdir -p $WORKSPACE/srv/mariadb/${MDB_TAG}/logs
+mkdir -p $WORKSPACE/srv/wmagent/${WMA_TAG}/install
+mkdir -p $WORKSPACE/srv/wmagent/${WMA_TAG}/logs
+mkdir -p $WORKSPACE/srv/wmagent/${WMA_TAG}/state
+mkdir -p $WORKSPACE/srv/wmagent/${WMA_TAG}/config
 
 # secrets
 cp /home/cmsbld/.globus/dmwm-config.tmpl $WORKSPACE/admin/wmagent/WMAgent.secrets

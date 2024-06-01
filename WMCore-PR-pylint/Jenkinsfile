@@ -25,6 +25,9 @@ pipeline {
         COUCH_TAG = '3.2.2'
         MDB_TAG = '10.6.5'
 
+        ghprbPullId = '11995'
+        ghprbTargetBranch = 'master'
+
     }
 
     stages {
@@ -40,10 +43,11 @@ pipeline {
                    '''
             }
         }
-        stage('Start Services') {
+        stage('Run pylint tests') {
             steps {
                 sh ''' 
-                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d wmagent-dev
+                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d wmcore-pr-pylint
+                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec wmcore-pr-test /home/cmsbld/ContainerScripts/pylintTest.sh
                    '''
             }
         }

@@ -64,7 +64,12 @@ services:
       - mariadb
       - couchdb
   
-  wmagent-dev:
-    <<: *wma-base
+  wmcore-pr-pylint:
     image: registry.cern.ch/cmsweb/wmcore-dev:latest
     tty: true
+    network_mode: "host"
+    environment:
+      ghprbPullId: ${ghprbPullId}
+      ghprbTargetBranch: ${ghprbTargetBranch}
+    volumes:
+      - "${HOST_MOUNT_DIR}/artifacts/:/home/cmsbld/artifacts/:Z"
