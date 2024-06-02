@@ -49,6 +49,7 @@ pipeline {
             steps {
                 sh ''' 
                    docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d $TEST_SERVICE
+                   sleep 10
                    docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE bash -c "ls -al"
                    docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE bash -c "id"
                    docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE bash -c "cd WMCore && git pull"
