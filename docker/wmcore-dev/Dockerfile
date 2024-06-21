@@ -1,20 +1,15 @@
 # FROM --platform=linux/amd64 registry.cern.ch/cmsweb/alma-base:alma9-20240305
-FROM --platform=linux/amd64 gitlab-registry.cern.ch/linuxsupport/alma9-base:latest
+FROM --platform=linux/amd64 registry.cern.ch/cmsweb/cmsweb-alma9-base:20240530
 
 # Install cern repo
 RUN dnf install -y 'dnf-command(config-manager)' && \
     dnf config-manager --add-repo https://linuxsoft.cern.ch/cern/alma/9/devel/x86_64/os
 
-# Install epel-repo
-RUN dnf upgrade -y && \
-    dnf install -y epel-release && \
-    dnf clean all
-
 # Install basic tools
 RUN dnf upgrade -y && \
     dnf install -y gcc git vim libcurl-devel \
         python3 python3-devel python3-pip \
-        mariadb-connector-c-devel cmake && \
+        mariadb-connector-c-devel cmake mariadb && \
     dnf clean all
 
 # Install wlcg repo and gfal2
@@ -39,6 +34,7 @@ RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel && \
 
 ADD TestScripts /home/cmsbld/TestScripts
 ADD ContainerScripts /home/cmsbld/ContainerScripts
+ADD etc /home/cmsbld/etc
 ADD entrypoint.sh /entrypoint.sh
 
 ENV X509_HOST_CERT=/data/certs/servicecert.pem
