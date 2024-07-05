@@ -17,7 +17,7 @@ export DATABASE=mysql://unittestagent@localhost/wmcore_unittest
 export COUCHURL=http://unittestagent:passwd@localhost:6994
 export DIALECT=MySQL
 
-rm -rf $ORG_SRC_PYTHON/*
+#rm -rf $ORG_SRC_PYTHON/*
 
 # ln -s $TEST_SRC_PYTHON/WMCore/ $ORG_SRC_PYTHON
 # ln -s $TEST_SRC_PYTHON/WMComponent/ $ORG_SRC_PYTHON
