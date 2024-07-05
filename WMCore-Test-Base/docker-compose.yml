@@ -92,6 +92,14 @@ services:
       - WMA_CONFIG_FILE
     command: ["/bin/bash"]
     volumes:
+      - "/etc/condor:/etc/condor:ro"
+      - "/tmp:/tmp"
+      - *certs
+      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/install:/data/srv/wmagent/current/install"
+      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/logs:/data/srv/wmagent/current/logs"
+      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/state:/data/srv/wmagent/current/state"
+      - "${HOST_MOUNT_DIR}/srv/wmagent/${WMA_TAG}/config:/data/srv/wmagent/current/config"
+      - *wma-admin
       - *passwd
       - *group
       - *sudoers
