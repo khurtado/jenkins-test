@@ -1,0 +1,90 @@
+pipeline {
+    agent {
+        label 'cms-dmwm-el9-10'
+    }
+
+    environment {
+        MY_HOSTNAME = """${sh(
+            returnStdout: true,
+            script: 'hostname -f'
+        ).trim()}"""
+
+        MY_ID = """${sh(
+            returnStdout: true,
+            script: 'id -u'
+        ).trim()}"""
+
+        MY_GROUP = """${sh(
+            returnStdout: true,
+            script: 'id -g'
+        ).trim()}"""
+
+        SLICES = '10'
+
+        HOST_MOUNT_DIR = "${env.WORKSPACE}"
+        
+        WMA_TAG = '2.3.3'
+        COUCH_TAG = '3.2.2'
+        MDB_TAG = '10.6.5'
+
+        ghprbPullId = '11995'
+        ghprbTargetBranch = 'master'
+
+        TEST_SERVICE = 'wmcore-unittests'
+
+    }
+
+    stages {
+        stage('Setup and run') {
+            matrix {
+                axes {
+                    axis {
+                        name 'SLICE'
+                        values '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'
+                    }
+                }
+                stages {
+                    stage('Setup') {
+                        steps {
+                            git branch: 'main', url: 'https://github.com/d-ylee/jenkins-test'
+                            sh '''
+                            echo "$(TZ=GMT date): Job name is $JOB_NAME"
+
+                            echo "Docker version:"
+                            docker version
+
+                            echo "Docker Compose version:"
+                            docker compose version
+
+                            echo "Setting up workspace directories"
+                            $WORKSPACE/WMCore-Test-Base/setup-env.sh
+                            '''
+                        }
+                    }
+                    stage('Run all unittests') {
+                        steps {
+                            sh ''' 
+                            docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d $TEST_SERVICE
+                            sleep 10
+                            docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE /home/cmsbld/ContainerScripts/pylintTest.sh
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            sh '''
+               docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml down --rmi all --remove-orphans
+               '''
+            archiveArtifacts artifacts: 'artifacts/*.json, artifacts/pep*.txt',
+                               followSymlinks: false,
+                               fingerprint: true,
+                               onlyIfSuccessful: true
+            cleanWs()
+        }
+    }
+}

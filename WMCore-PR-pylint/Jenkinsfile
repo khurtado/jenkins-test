@@ -20,10 +20,6 @@ pipeline {
         ).trim()}"""
 
         HOST_MOUNT_DIR = "${env.WORKSPACE}"
-        
-        WMA_TAG = '2.3.3'
-        COUCH_TAG = '3.2.2'
-        MDB_TAG = '10.6.5'
 
         ghprbPullId = '11995'
         ghprbTargetBranch = 'master'
@@ -50,10 +46,7 @@ pipeline {
                 sh ''' 
                    docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d $TEST_SERVICE
                    sleep 10
-                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE bash -c "ls -al"
-                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE bash -c "id"
-                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE bash -c "cd WMCore && git pull"
-                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE /home/cmsbld/ContainerScripts/pylintTest.sh
+                   docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE /home/cmsbld/TestScripts/pylintPRTest.sh
                    '''
             }
         }
