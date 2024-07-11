@@ -1,38 +1,5 @@
 pipeline {
-    agent {
-        label 'cms-dmwm-el9-10'
-    }
-
-    environment {
-        MY_HOSTNAME = """${sh(
-            returnStdout: true,
-            script: 'hostname -f'
-        ).trim()}"""
-
-        MY_ID = """${sh(
-            returnStdout: true,
-            script: 'id -u'
-        ).trim()}"""
-
-        MY_GROUP = """${sh(
-            returnStdout: true,
-            script: 'id -g'
-        ).trim()}"""
-
-        SLICES = '10'
-
-        HOST_MOUNT_DIR = "${env.WORKSPACE}"
-        
-        WMA_TAG = '2.3.3'
-        COUCH_TAG = '3.2.2'
-        MDB_TAG = '10.6.5'
-
-        ghprbPullId = '11995'
-        ghprbTargetBranch = 'master'
-
-        TEST_SERVICE = 'wmcore-unittests'
-
-    }
+    agent master
 
     stages {
         stage('Matrix') {
@@ -44,7 +11,36 @@ pipeline {
                     }
                 }
                 stages {
-                    stage('Setup and run') {
+                    stage('Setup and run - Slice ${SLICE}') {
+                        environment {
+                            MY_HOSTNAME = """${sh(
+                                returnStdout: true,
+                                script: 'hostname -f'
+                            ).trim()}"""
+
+                            MY_ID = """${sh(
+                                returnStdout: true,
+                                script: 'id -u'
+                            ).trim()}"""
+
+                            MY_GROUP = """${sh(
+                                returnStdout: true,
+                                script: 'id -g'
+                            ).trim()}"""
+
+                            HOST_MOUNT_DIR = "${env.WORKSPACE}"
+                            
+                            WMA_TAG = '2.3.3'
+                            COUCH_TAG = '3.2.2'
+                            MDB_TAG = '10.6.5'
+
+                            ghprbPullId = '11995'
+                            ghprbTargetBranch = 'master'
+
+                            TEST_SERVICE = 'wmcore-unittests'
+
+                            SLICES = 12
+                        }
                         steps {
                             throttle(['DMWM-services']) {
                                 node( 'cms-dmwm-el9-10') {
