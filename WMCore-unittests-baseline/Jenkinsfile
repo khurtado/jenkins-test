@@ -3,14 +3,6 @@ pipeline {
         label 'cms-dmwm-el9-10'
     }
 
-    options {
-        throttleJobProperty(
-            categories: ['DMWM-services'],
-            throttleEnabled: true,
-            throttleOption: 'category'
-        )
-    }
-
     environment {
         MY_HOSTNAME = """${sh(
             returnStdout: true,
@@ -43,7 +35,7 @@ pipeline {
     }
 
     stages {
-        stage('Setup and run') {
+        stage('Matrix') {
             matrix {
                 axes {
                     axis {
@@ -52,30 +44,30 @@ pipeline {
                     }
                 }
                 stages {
-                    stage('Setup') {
+                    stage('Setup and run') {
                         steps {
-                            git branch: 'main', url: 'https://github.com/d-ylee/jenkins-test'
-                            sh '''
-                            echo "$(TZ=GMT date): Job name is $JOB_NAME"
+                            throttle(['DMWM-services']) {
+                                node( 'cms-dmwm-el9-10') {
+                                    git branch: 'main', url: 'https://github.com/d-ylee/jenkins-test'
+                                    sh '''
+                                    echo "$(TZ=GMT date): Job name is $JOB_NAME"
 
-                            echo "Docker version:"
-                            docker version
+                                    echo "Docker version:"
+                                    docker version
 
-                            echo "Docker Compose version:"
-                            docker compose version
+                                    echo "Docker Compose version:"
+                                    docker compose version
 
-                            echo "Setting up workspace directories"
-                            $WORKSPACE/WMCore-Test-Base/setup-env.sh
-                            '''
-                        }
-                    }
-                    stage('Run all unittests') {
-                        steps {
-                            sh ''' 
-                            docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d $TEST_SERVICE
-                            sleep 10
-                            docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE /home/cmsbld/ContainerScripts/pylintTest.sh
-                            '''
+                                    echo "Setting up workspace directories"
+                                    $WORKSPACE/WMCore-Test-Base/setup-env.sh
+                                    '''
+                                    sh ''' 
+                                    docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d $TEST_SERVICE
+                                    sleep 10
+                                    docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID $TEST_SERVICE /home/cmsbld/ContainerScripts/pylintTest.sh
+                                    '''
+                                }
+                            }
                         }
                     }
                 }
