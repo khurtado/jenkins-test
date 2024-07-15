@@ -21,9 +21,6 @@ pipeline {
 
         HOST_MOUNT_DIR = "${env.WORKSPACE}"
 
-        ghprbPullId = '11995'
-        ghprbTargetBranch = 'master'
-
         TEST_SERVICE = 'wmcore-pr-pylint'
 
     }
@@ -41,7 +38,7 @@ pipeline {
                    '''
             }
         }
-        stage('Run pylint tests') {
+        stage('Run pylint tests-${ghprbPullId}') {
             steps {
                 sh ''' 
                    docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d $TEST_SERVICE
