@@ -13,7 +13,8 @@ export CERT_DIR=/data/certs
 #export ORG_SRC_OTHER=$INSTALL_DIR/current/apps/wmagentpy3/data
 #export DBSOCK=$INSTALL_DIR/current/install/mysql/logs/mysql.sock
 
-export DATABASE=mysql://unittestagent@localhost/wmcore_unittest
+# TODO: Somewhat redundant in TestScripts/test-wmcorepy3.sh
+export DATABASE=mysql://${MDB_USER}:${MDB_PASS}@127.0.0.1/${MDB_UNITTEST_DB}
 export COUCHURL=http://unittestagent:passwd@localhost:6994
 export DIALECT=MySQL
 

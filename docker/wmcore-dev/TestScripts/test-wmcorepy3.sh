@@ -12,16 +12,18 @@ set +x
 echo "Sourcing a python3 unittest environment"
 . $WORKDIR/TestScripts/env_unittest.sh
 
-MDB_UNITTEST_DB=wmcore_unittest
-
 # load wmagent secrets
 . /data/admin/wmagent/WMAgent.secrets
+
+# This is what the production wmagent-mariadb image defines (via WMA_DATABASE) has as of 2024/07/15
+# TODO: We should either make an option in the mariadb image to define the default WMA_DATABASE or make a custom test mariadb image
+MDB_UNITTEST_DB=wmagent
+
 export DATABASE=mysql://${MDB_USER}:${MDB_PASS}@127.0.0.1/${MDB_UNITTEST_DB}
 export COUCHURL="http://${COUCH_USER}:${COUCH_PASS}@${COUCH_HOST}:${COUCH_PORT}"
 
 # ensure db exists
-MDB_UNITTEST_DB=wmcore_unittest
-mysql -u ${MDB_USER} --execute "CREATE DATABASE IF NOT EXISTS ${MDB_UNITTEST_DB}"
+mysql -u ${MDB_USER} -h 127.0.0.1 -p${MDB_PASS} --execute "CREATE DATABASE IF NOT EXISTS ${MDB_UNITTEST_DB}"
 
 # rucio
 export RUCIO_HOST=$RUCIO_HOST
