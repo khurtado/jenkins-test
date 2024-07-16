@@ -21,6 +21,10 @@ pipeline {
 
         HOST_MOUNT_DIR = "${env.WORKSPACE}"
 
+        WMA_TAG = '2.3.3'
+        COUCH_TAG = '3.2.2'
+        MDB_TAG = '10.6.5'
+
         TEST_SERVICE = 'wmcore-pr-pylint'
 
     }
