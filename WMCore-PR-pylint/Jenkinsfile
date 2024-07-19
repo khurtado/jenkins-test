@@ -34,7 +34,7 @@ pipeline {
             steps {
                 git branch: 'main', url: 'https://github.com/d-ylee/jenkins-test'
                 sh '''
-                   echo "Running WMCore-PR-pylint for ${ghprbPullId}
+                   echo "Running WMCore-PR-pylint for ${ghprbPullId}"
                    echo "Setting up workspace directories"
                    $WORKSPACE/WMCore-Test-Base/setup-env.sh
                    ls $WORKSPACE
