@@ -26,8 +26,6 @@ services:
       - *sudoers
       - *sudoersd
     hostname: ${MY_HOSTNAME}
-    environment:
-      - WMA_DATABASE=wmcore_unittest
 
   couchdb:
     <<: *common-service
