@@ -63,7 +63,7 @@ pipeline {
                                     sh ''' 
                                     echo "Testing slice $SLICE of $SLICES"
                                     docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d $TEST_SERVICE
-                                    sleep 10
+                                    sleep 15
                                     docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID -e SLICES=$SLICES -e SLICE=$SLICE $TEST_SERVICE /home/cmsbld/TestScripts/test-wmcorepy3.sh
                                     '''
                                 }
