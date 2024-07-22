@@ -30,6 +30,25 @@ export RUCIO_HOST=$RUCIO_HOST
 export RUCIO_AUTH=$RUCIO_AUTH
 set -x
 
+pushd $CODE
+
+# use ghprbPullId if triggered from a PR
+if [[ -z "${ghprbPullId}" ]]; then
+    git fetch --tags  https://github.com/dmwm/WMCore.git "+refs/heads/*:refs/remotes/origin/*"
+    git config remote.origin.url https://github.com/dmwm/WMCore.git
+    git config --add remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+    git fetch --tags --quiet  https://github.com/dmwm/WMCore.git "+refs/pull/*:refs/remotes/origin/pr/*"
+    export COMMIT=`git rev-parse "origin/pr/$ghprbPullId/merge^{commit}"`
+    export LATEST_TAG=`git tag |grep JENKINS| sort | tail -1`
+
+    # First try to merge this PR into the same tag used for the baseline
+    # Next try to merge this tag onto current master
+    # Finally give up and just test the tip of the branch
+    (git checkout $LATEST_TAG && git merge $COMMIT) || (git checkout master && git merge $COMMIT) || git checkout -f $COMMIT
+fi
+
+popd
+
 ### Some tweaks for the nose run (in practice, there is nothing to change in setup_test.py...)
 # working dir includes entire python source - ignore
 perl -p -i -e 's/--cover-inclusive//' $CODE/setup_test.py

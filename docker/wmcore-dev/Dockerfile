@@ -43,3 +43,5 @@ ENV X509_USER_CERT=/data/certs/servicecert.pem
 ENV X509_USER_KEY=/data/certs/servicekey.pem
 
 ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["sleep", "infinity"]
