@@ -84,6 +84,8 @@ pipeline {
                                                     fingerprint: true,
                                                     onlyIfSuccessful: true
 
+                                    junit stdioRetention: '', testResults: 'artifacts/nosetests*.xml'
+
                                     cleanWs()
                                 }
                             }
@@ -99,10 +101,6 @@ pipeline {
             sh '''
                docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml down
                '''
-            archiveArtifacts artifacts: 'artifacts/*.json, artifacts/pep*.txt',
-                               followSymlinks: false,
-                               fingerprint: true,
-                               onlyIfSuccessful: true
             cleanWs()
         }
     }
