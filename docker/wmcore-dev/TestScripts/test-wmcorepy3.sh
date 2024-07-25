@@ -23,7 +23,15 @@ export DATABASE=mysql://${MDB_USER}:${MDB_PASS}@127.0.0.1/${MDB_UNITTEST_DB}
 export COUCHURL="http://${COUCH_USER}:${COUCH_PASS}@${COUCH_HOST}:${COUCH_PORT}"
 
 # ensure db exists
-mysql -u ${MDB_USER} -h 127.0.0.1 -p${MDB_PASS} --execute "CREATE DATABASE IF NOT EXISTS ${MDB_UNITTEST_DB}"
+# retry if fails
+
+
+for i in 1 2 3 4 5; do
+    mysql -u ${MDB_USER} -h 127.0.0.1 -p${MDB_PASS} --execute "CREATE DATABASE IF NOT EXISTS ${MDB_UNITTEST_DB}" && break
+
+    echo "Attempt $i failed. Trying again..."
+    sleep 5
+done
 
 # rucio
 export RUCIO_HOST=$RUCIO_HOST
