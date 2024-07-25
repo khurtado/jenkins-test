@@ -70,11 +70,11 @@ pipeline {
 
                                     catchError {
                                         sh ''' 
-                                        echo "Testing slice $SLICE of $SLICES"
-                                        docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID -e SLICES=$SLICES -e SLICE=$SLICE $TEST_SERVICE /home/cmsbld/TestScripts/test-wmcorepy3.sh
+                                        echo "Testing slice $SLICE of $SLICES for build $BUILD_ID"
+                                        docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID -e BUILD_ID=$BUILD_ID -e SLICES=$SLICES -e SLICE=$SLICE $TEST_SERVICE /home/cmsbld/TestScripts/test-wmcorepy3.sh
                                         '''
 
-                                        archiveArtifacts artifacts: 'artifacts/*.json, artifacts/pep*.txt',
+                                        archiveArtifacts artifacts: 'artifacts/nosetests-*.xml',
                                                         followSymlinks: false,
                                                         fingerprint: true,
                                                         onlyIfSuccessful: true
