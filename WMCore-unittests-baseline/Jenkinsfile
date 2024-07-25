@@ -84,7 +84,7 @@ pipeline {
                                                     fingerprint: true,
                                                     onlyIfSuccessful: true
 
-                                    junit stdioRetention: '', testResults: 'artifacts/nosetests*.xml'
+                                    junit keepTestNames: true, skipPublishingChecks: true, stdioRetention: '', testResults: 'artifacts/nosetests*.xml'
 
                                     cleanWs()
                                 }
