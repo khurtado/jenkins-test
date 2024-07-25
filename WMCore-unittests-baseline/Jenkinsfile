@@ -73,18 +73,13 @@ pipeline {
                                         echo "Testing slice $SLICE of $SLICES for build $BUILD_ID"
                                         docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID -e BUILD_ID=$BUILD_ID -e SLICES=$SLICES -e SLICE=$SLICE $TEST_SERVICE /home/cmsbld/TestScripts/test-wmcorepy3.sh
                                         '''
+
+                                        stash includes: 'artifacts/nosetests*.xml', name: '${SLICE}-artifacts', allowEmpty: true
                                     }
 
                                     sh '''
                                     docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml down
                                     '''
-
-                                    archiveArtifacts artifacts: 'artifacts/nosetests*.xml',
-                                                    followSymlinks: false,
-                                                    fingerprint: true,
-                                                    onlyIfSuccessful: true
-
-                                    junit keepTestNames: true, skipPublishingChecks: true, stdioRetention: '', testResults: 'artifacts/nosetests*.xml'
 
                                     cleanWs()
                                 }
@@ -101,6 +96,20 @@ pipeline {
             sh '''
                docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml down
                '''
+
+            script {
+                for (int i = 0; i < 12; i++) {
+                    unstash '${i}-artifacts'
+                }
+            }
+
+            archiveArtifacts artifacts: 'artifacts/nosetests*.xml',
+                            followSymlinks: false,
+                            fingerprint: true,
+                            onlyIfSuccessful: true
+
+            junit keepTestNames: true, skipPublishingChecks: true, stdioRetention: '', testResults: 'artifacts/nosetests*.xml'
+
             cleanWs()
         }
     }
