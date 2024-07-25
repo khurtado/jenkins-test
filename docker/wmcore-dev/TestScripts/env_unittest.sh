@@ -49,11 +49,11 @@ export X509_USER_KEY=$CERT_DIR/servicekey.pem
 
 ### some Rucio setup needed for jenkins and docker unit tests
 # fetch the values defined in the secrets file and update rucio.cfg file
-export RUCIO_HOME=$BASE_DIR/etc # TODO: Change to specific rucio directory
+export RUCIO_HOME=$BASE_DIR # TODO: Change to specific rucio directory
 MATCH_RUCIO_HOST=`cat $WMAGENT_SECRETS_LOCATION | grep RUCIO_HOST | sed s/RUCIO_HOST=//`
 MATCH_RUCIO_AUTH=`cat $WMAGENT_SECRETS_LOCATION | grep RUCIO_AUTH | sed s/RUCIO_AUTH=//`
-sed "s+^rucio_host.*+rucio_host = $MATCH_RUCIO_HOST+" $RUCIO_HOME/rucio.cfg-temp > $RUCIO_HOME/rucio.cfg
-sed "s+^auth_host.*+auth_host = $MATCH_RUCIO_AUTH+" $RUCIO_HOME/rucio.cfg-temp > $RUCIO_HOME/rucio.cfg
+sed "s+^rucio_host.*+rucio_host = $MATCH_RUCIO_HOST+" $RUCIO_HOME/etc/rucio.cfg-temp > $RUCIO_HOME/etc/rucio.cfg
+sed "s+^auth_host.*+auth_host = $MATCH_RUCIO_AUTH+" $RUCIO_HOME/etc/rucio.cfg-temp > $RUCIO_HOME/etc/rucio.cfg
 echo "Updated RUCIO_HOME file under: $RUCIO_HOME"
 
 export PYTHONPATH=/home/cmsbld/WMCore/test/python:$PYTHONPATH

@@ -32,8 +32,10 @@ set -x
 
 pushd $CODE
 
+git pull origin master
+
 # use ghprbPullId if triggered from a PR
-if [[ -z "${ghprbPullId}" ]]; then
+if [[ ! -z "${ghprbPullId}" ]]; then
     git fetch --tags  https://github.com/dmwm/WMCore.git "+refs/heads/*:refs/remotes/origin/*"
     git config remote.origin.url https://github.com/dmwm/WMCore.git
     git config --add remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
