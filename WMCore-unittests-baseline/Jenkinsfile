@@ -74,7 +74,9 @@ pipeline {
                                         docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -u $MY_ID -e BUILD_ID=$BUILD_ID -e SLICES=$SLICES -e SLICE=$SLICE $TEST_SERVICE /home/cmsbld/TestScripts/test-wmcorepy3.sh
                                         '''
 
-                                        stash includes: 'artifacts/nosetests*.xml', name: '${SLICE}-artifacts', allowEmpty: true
+                                        script {
+                                            stash includes: 'artifacts/nosetests*.xml', name: "${SLICE}-artifacts", allowEmpty: true
+                                        }
                                     }
 
                                     sh '''
@@ -99,7 +101,7 @@ pipeline {
 
             script {
                 for (int i = 0; i < 12; i++) {
-                    unstash '${i}-artifacts'
+                    unstash "${i}-artifacts"
                 }
             }
 
