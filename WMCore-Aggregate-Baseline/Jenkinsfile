@@ -4,7 +4,6 @@ pipeline {
     }
 
     environment {
-        DMWMBOT_TOKEN = credentials('New dmwm-bot GH token')
         CODE_REPO = "WMCore"
         WMCORE_REP = "dmwm"
     }
@@ -25,19 +24,21 @@ pipeline {
         }
         stage('Compare tests') {
             steps {
-                sh '''
-                ls $WORKSPACE
+                withCredentials([string(credentialsId: 'd0bc4ba6-d9c5-4668-9839-1b7ff6f795fe', variable: 'DMWMBOT_TOKEN')]) {
+                    sh '''
+                    ls $WORKSPACE
 
-                git clone https://github.com/dmwm/WMCore.git code
+                    git clone https://github.com/dmwm/WMCore.git code
 
-                echo "$(TZ=GMT date): comparing tests..."
+                    echo "$(TZ=GMT date): comparing tests..."
 
-                $WORKSPACE/bin/python $WORKSPACE/docker/wmcore-dev/ContainerScripts/CompareTests.py nosetestspy3
+                    $WORKSPACE/bin/python $WORKSPACE/docker/wmcore-dev/ContainerScripts/CompareTests.py nosetestspy3
 
-                pushd code
-                `git tag |grep JENKINS| sort | tail -1 > LatestTag`
-                popd
-                '''
+                    pushd code
+                    `git tag |grep JENKINS| sort | tail -1 > LatestTag`
+                    popd
+                    '''
+                }
             }
         }
     }
