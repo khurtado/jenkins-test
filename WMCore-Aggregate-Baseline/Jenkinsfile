@@ -1,0 +1,39 @@
+pipeline {
+    agent {
+        label 'cms-dmwm-el9'
+    }
+
+    environment {
+        CODE_REPO = "WMCore"
+        WMCORE_REP = "dmwm"
+    }
+
+    stages {
+        stage('Setup') {
+            steps {
+                copyArtifacts filter: 'nosetest*.xml', fingerprintArtifacts: true, projectName: 'WMCore-Unittest-Baseline', selector: lastWithArtifacts(), target: 'artifacts'
+
+                sh '''
+                echo "$(TZ=GMT date): Job name is $JOB_NAME"
+
+                echo "Creating a venv at $WORKSPACE and install dependencies"
+                python3 -m venv .
+                source $WORKSPACE/bin/activate
+
+                ls $WORKSPACE
+
+                git clone https://github.com/$WMCORE_REPO/WMCore.git code
+
+                echo "$(TZ=GMT date): comparing tests..."
+
+                ./ContainerScripts/CompareTests.py nosetestspy3
+
+                pushd code
+                `git tag |grep JENKINS| sort | tail -1 > LatestTag`
+                popd
+
+                '''
+            }
+        }
+    }
+}
