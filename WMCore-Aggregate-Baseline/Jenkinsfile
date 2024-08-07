@@ -18,9 +18,7 @@ pipeline {
 
                 echo "Creating a venv at $WORKSPACE and install dependencies"
                 python3 -m venv .
-                source $WORKSPACE/bin/activate
                 $WORKSPACE/bin/pip install PyGithub xunitparser
-
                 '''
             }
         }
@@ -33,7 +31,7 @@ pipeline {
 
                 echo "$(TZ=GMT date): comparing tests..."
 
-                $WORKSPACE/bin/python ./ContainerScripts/CompareTests.py nosetestspy3
+                $WORKSPACE/bin/python $WORKSPACE/docker/wmcore-dev/ContainerScripts/CompareTests.py nosetestspy3
 
                 pushd code
                 `git tag |grep JENKINS| sort | tail -1 > LatestTag`
