@@ -4,6 +4,7 @@ pipeline {
     }
 
     environment {
+        DMWMBOT_TOKEN = credentials('New dmwm-bot GH token')
         CODE_REPO = "WMCore"
         WMCORE_REP = "dmwm"
     }
