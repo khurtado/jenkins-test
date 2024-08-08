@@ -18,7 +18,6 @@ pipeline {
 
                 copyArtifacts filter: 'artifacts/nosetest*.xml',
                 fingerprintArtifacts: true,
-                flatten: true,
                 projectName: 'WMCore-Unittest-Baseline',
                 selector: lastSuccessful(),
                 target: 'LatestUnitTests'
@@ -56,6 +55,10 @@ pipeline {
 
     post {
         always {
+            archiveArtifacts artifacts: 'code/LatestTag, LatestUnitTests/*/nosetestspy3*.xml', followSymlinks: false
+
+            junit testResults: 'LatestUnitTests/*/nosetestspy3*.xml'
+
             cleanWs()
         }
     }
