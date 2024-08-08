@@ -57,7 +57,9 @@ pipeline {
         always {
             archiveArtifacts artifacts: 'code/LatestTag, LatestUnitTests/*/nosetestspy3*.xml', followSymlinks: false
 
-            junit testResults: 'LatestUnitTests/*/nosetestspy3*.xml'
+            junit testResults: 'LatestUnitTests/*/nosetestspy3*.xml',
+            skipPublishingChecks: true,
+            stdioRetention: ''
 
             cleanWs()
         }
