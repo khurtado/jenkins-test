@@ -6,6 +6,7 @@ pipeline {
     environment {
         CODE_REPO = "WMCore"
         WMCORE_REPO = "dmwm"
+        TargetIssueID = "0"
     }
 
     stages {
@@ -15,14 +16,22 @@ pipeline {
 
                 git branch: 'main', poll: false, url: 'https://github.com/d-ylee/jenkins-test'
 
-                copyArtifacts filter: 'artifacts/nosetest*.xml', fingerprintArtifacts: true, projectName: 'WMCore-Unittest-Baseline', selector: lastWithArtifacts(), target: 'artifacts'
+                copyArtifacts filter: 'artifacts/nosetest*.xml',
+                fingerprintArtifacts: true,
+                flatten: true,
+                projectName: 'WMCore-Unittest-Baseline',
+                selector: lastSuccessful(),
+                target: 'LatestUnitTests'
+
 
                 sh '''
                 echo "$(TZ=GMT date): Job name is $JOB_NAME"
 
                 echo "Creating a venv at $WORKSPACE and installing dependencies"
                 python3 -m venv .
-                $WORKSPACE/bin/pip install PyGithub xunitparser
+                $WORKSPACE/bin/pip install xunitparser
+
+                ls $WORKSPACE
                 '''
             }
         }
@@ -42,6 +51,12 @@ pipeline {
                     '''
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
         }
     }
 }
