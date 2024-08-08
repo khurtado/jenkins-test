@@ -1,1 +1,4 @@
 contents/
+ContainerScripts/LatestUnitTests
+.DS_Store
+*/**/venv

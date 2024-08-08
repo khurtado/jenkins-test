@@ -40,8 +40,6 @@ for kind, directory in [('base', './MasterUnitTests/'), ('test', './LatestUnitTe
             else:
                 testResults[testName] = {kind: tc.result}
 
-print(testResults)
-
 # Generate a Github report of any changes found
 
 issueID, mode = None, None
@@ -65,7 +63,6 @@ failed = False
 errorConditions = ['error', 'failure']
 
 for testName, testResult in sorted(testResults.items()):
-    print(f'{testName}: {testResult}')
     if 'base' in testResult and 'test' in testResult and testName in unstableTests:
         if testResult['base'] != testResult['test']:
             changed = True
