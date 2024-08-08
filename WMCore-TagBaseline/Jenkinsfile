@@ -1,0 +1,49 @@
+pipeline {
+    agent {
+        label 'cms-dmwm-el9'
+    }
+
+    environment {
+        WMCORE_REPO = "dmwm"
+        TAG_PREFIX = "JENKINS_EL9"
+        CODE_REPO = "WMCore"
+    }
+
+    stages {
+        stage('Setup') {
+            steps {
+                sh ''' 
+                set -x
+                echo "Job name is $JOB_NAME"
+
+                docker system prune -af
+                echo "Disk space situation is:"
+                df -h
+
+                mkdir artifacts
+                chmod 777 artifacts
+
+                git clone https://github.com/dmwm/WMCore
+                '''
+            }
+        }
+        stage('Tag Baseline') {
+            steps {
+                withCredentials([string(credentialsId: 'd0bc4ba6-d9c5-4668-9839-1b7ff6f795fe', variable: 'DMWMBOT_TOKEN')]) {
+                    sh '''
+                    $WORKSPACE/docker/wmcore-dev/ContainerScripts/tagLatestWMCore.sh
+
+                    echo "Finishing up"
+                    '''
+                }
+
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
