@@ -13,28 +13,28 @@ pipeline {
             steps {
                 cleanWs()
 
+                git branch: 'main', poll: false, url: 'https://github.com/d-ylee/jenkins-test'
+
                 copyArtifacts filter: 'artifacts/nosetest*.xml', fingerprintArtifacts: true, projectName: 'WMCore-Unittest-Baseline', selector: lastWithArtifacts(), target: 'artifacts'
 
                 sh '''
                 echo "$(TZ=GMT date): Job name is $JOB_NAME"
 
-                echo "Creating a venv at $WORKSPACE and install dependencies"
+                echo "Creating a venv at $WORKSPACE and installing dependencies"
                 python3 -m venv .
                 $WORKSPACE/bin/pip install PyGithub xunitparser
                 '''
-
-                git branch: 'main', poll: false, url: 'https://github.com/d-ylee/jenkins-test'
             }
         }
         stage('Compare tests') {
             steps {
                 withCredentials([string(credentialsId: 'd0bc4ba6-d9c5-4668-9839-1b7ff6f795fe', variable: 'DMWMBOT_TOKEN')]) {
                     sh '''
-                    ls $WORKSPACE
+                    git clone https://github.com/dmwm/WMCore code
 
                     echo "$(TZ=GMT date): comparing tests..."
 
-                    $WORKSPACE/bin/python $WORKSPACE/jenkins-test/docker/wmcore-dev/ContainerScripts/CompareTests.py nosetestspy3
+                    $WORKSPACE/bin/python $WORKSPACE/docker/wmcore-dev/ContainerScripts/CompareTests.py nosetestspy3
 
                     pushd code
                     `git tag |grep JENKINS| sort | tail -1 > LatestTag`
