@@ -5,12 +5,14 @@ pipeline {
 
     environment {
         CODE_REPO = "WMCore"
-        WMCORE_REP = "dmwm"
+        WMCORE_REPO = "dmwm"
     }
 
     stages {
         stage('Setup') {
             steps {
+                cleanWs()
+
                 copyArtifacts filter: 'artifacts/nosetest*.xml', fingerprintArtifacts: true, projectName: 'WMCore-Unittest-Baseline', selector: lastWithArtifacts(), target: 'artifacts'
 
                 sh '''
@@ -20,6 +22,8 @@ pipeline {
                 python3 -m venv .
                 $WORKSPACE/bin/pip install PyGithub xunitparser
                 '''
+
+                git branch: 'main', poll: false, url: 'https://github.com/d-ylee/jenkins-test'
             }
         }
         stage('Compare tests') {
@@ -28,11 +32,9 @@ pipeline {
                     sh '''
                     ls $WORKSPACE
 
-                    git clone https://github.com/dmwm/WMCore.git code
-
                     echo "$(TZ=GMT date): comparing tests..."
 
-                    $WORKSPACE/bin/python $WORKSPACE/docker/wmcore-dev/ContainerScripts/CompareTests.py nosetestspy3
+                    $WORKSPACE/bin/python $WORKSPACE/jenkins-test/docker/wmcore-dev/ContainerScripts/CompareTests.py nosetestspy3
 
                     pushd code
                     `git tag |grep JENKINS| sort | tail -1 > LatestTag`
