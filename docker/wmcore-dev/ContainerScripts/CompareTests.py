@@ -26,7 +26,7 @@ except:
     print("Was not able to open list of unstable tests")
 
 # Parse all the various nose xunit test reports looking for changes
-filePattern = '*/nosetestspy3-*.xml'
+filePattern = 'nosetestspy3-*.xml'
 # if len(sys.argv) == 2:
 #     filePattern = "*/%s-*.xml" % sys.argv[1]
 for kind, directory in [('base', './MasterUnitTests/'), ('test', './LatestUnitTests/')]:
