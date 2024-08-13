@@ -89,6 +89,7 @@ services:
       - MY_ID
       - MY_GROUP
       - WMA_CONFIG_FILE
+      - BUILD_ID
     user: root
     pull_policy: always
     volumes:
