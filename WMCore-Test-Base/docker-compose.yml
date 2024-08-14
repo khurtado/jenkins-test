@@ -73,6 +73,7 @@ services:
       - ghprbTargetBranch=${ghprbTargetBranch}
       - MY_ID
       - MY_GROUP
+      - BUILD_ID
     command: ["/bin/bash"]
     volumes:
       - *passwd
