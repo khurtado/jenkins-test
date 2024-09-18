@@ -83,11 +83,11 @@ pipeline {
                                     docker ps
 
                                     echo "--Check MariaDB docker envinronment"
-                                    docker exec -it mariadb env
+                                    docker-compose -f  $WORKSPACE/WMCore-Test-Base/docker-compose.yml -T mariadb env
                                     echo "--end of MariaDB docker envinronment"
 
                                     echo "--Check CouchDB docker envinronment"
-                                    docker exec -it couchdb env
+                                    docker-compose -f  $WORKSPACE/WMCore-Test-Base/docker-compose.yml -T couchdb env
                                     echo "--end of CouchDB docker envinronment"
 
                                     '''
