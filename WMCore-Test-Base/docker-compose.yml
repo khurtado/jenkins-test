@@ -15,6 +15,7 @@ services:
   mariadb:
     <<: *common-service
     image: registry.cern.ch/cmsweb/mariadb:${MDB_TAG}
+    container_name: mariadb
     volumes:
       - "/tmp:/tmp"
       - "${HOST_MOUNT_DIR}/srv/mariadb/${MDB_TAG}/install/database:/data/srv/mariadb/current/install/database"
@@ -30,6 +31,7 @@ services:
   couchdb:
     <<: *common-service
     image: registry.cern.ch/cmsweb/wmagent-couchdb:${COUCH_TAG}
+    container_name: couchdb
     volumes:
       - "/tmp:/tmp"
       - *certs
