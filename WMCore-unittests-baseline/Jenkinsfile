@@ -56,6 +56,10 @@ pipeline {
                                     echo "Docker Compose version:"
                                     docker compose version
 
+                                    echo "Workspace directory and content:"
+                                    pwd
+                                    ls -l
+
                                     echo "Setting up workspace directories"
                                     $WORKSPACE/WMCore-Test-Base/setup-env.sh
 
@@ -65,6 +69,17 @@ pipeline {
                                     echo "Starting containers"
                                     docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d $TEST_SERVICE
                                     sleep 10
+
+                                    echo "Check docker ps output"
+                                    docker ps
+
+                                    echo "--Check MariaDB docker envinronment"
+                                    docker exec -it mariadb env
+                                    echo "--end of MariaDB docker envinronment"
+
+                                    echo "--Check CouchDB docker envinronment"
+                                    docker exec -it couchdb env
+                                    echo "--end of CouchDB docker envinronment"
 
                                     '''
 
