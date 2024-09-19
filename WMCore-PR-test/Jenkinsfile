@@ -38,6 +38,9 @@ pipeline {
 
                             TEST_SERVICE = 'wmcore-pr-test'
 
+                            ghprbPullId = '11995'
+                            ghprbTargetBranch = 'master'
+
                             SLICES = 12
                         }
                         steps {
