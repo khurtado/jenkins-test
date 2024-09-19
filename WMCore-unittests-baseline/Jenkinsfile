@@ -67,7 +67,6 @@ pipeline {
                                     echo "Workspace directory and content:"
                                     pwd
                                     ls -l
-                                    ls -l $WORKSPACE/admin/*/*
 
                                     echo "Setting up workspace directories"
                                     $WORKSPACE/WMCore-Test-Base/setup-env.sh
