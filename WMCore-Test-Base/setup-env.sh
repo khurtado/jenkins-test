@@ -27,6 +27,8 @@ cat /home/cmsbld/.globus/dmwm-mariadb.tmpl
 cp /home/cmsbld/.globus/*.pem $WORKSPACE/certs
 mv $WORKSPACE/certs/usercert.pem $WORKSPACE/certs/servicecert.pem
 mv $WORKSPACE/certs/userkey.pem $WORKSPACE/certs/servicekey.pem
+chmod 600 $WORKSPACE/certs/servicecert.pem
+chmod 400 $WORKSPACE/certs/servicekey.pem
 
 # fix some incorrect information in secrets files
 # change to correct CouchDB port
