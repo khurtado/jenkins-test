@@ -100,6 +100,9 @@ pipeline {
                                     echo "--Check CouchDB certificates"
                                     docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -T couchdb ls -l /data/certs
                                     docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -T couchdb openssl x509 -in /data/certs/servicecert.pem -noout -dates -subject
+                                    echo "--Check WMCore-unittets certificates"
+                                    docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -T wmcore-unittests ls -l /data/certs
+                                    docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -T wmcore-unittests openssl x509 -in /data/certs/servicecert.pem -noout -dates -subject
                                     echo "--end of MariaDB docker envinronment"
 
 
