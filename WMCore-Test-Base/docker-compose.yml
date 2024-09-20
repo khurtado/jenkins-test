@@ -18,6 +18,7 @@ services:
     container_name: mariadb
     volumes:
       - "/tmp:/tmp"
+      - *certs
       - "${HOST_MOUNT_DIR}/srv/mariadb/${MDB_TAG}/install/database:/data/srv/mariadb/current/install/database"
       - "${HOST_MOUNT_DIR}/srv/mariadb/${MDB_TAG}/logs:/data/srv/mariadb/current/logs"
       - "${HOST_MOUNT_DIR}/admin/mariadb:/data/admin/mariadb/"
