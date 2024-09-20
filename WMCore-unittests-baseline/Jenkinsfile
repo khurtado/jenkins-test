@@ -97,6 +97,12 @@ pipeline {
                                     docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml logs couchdb
                                     echo "--end of MariaDB docker envinronment"
 
+                                    echo "--Check CouchDB certificates"
+                                    docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -T couchdb ls -l /data/certs
+                                    docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -T couchdb openssl x509 -in /data/certs/servicecert.pem -noout -dates
+                                    echo "--end of MariaDB docker envinronment"
+
+
                                     '''
 
                                     catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
