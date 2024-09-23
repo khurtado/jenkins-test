@@ -104,7 +104,6 @@ pipeline {
                                     docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -T wmcore-unittests ls -l /data/certs
                                     docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml exec -T wmcore-unittests openssl x509 -in /data/certs/servicecert.pem -noout -dates -subject
                                     echo "--end of MariaDB docker envinronment"
-                                    sleep 3600
 
 
                                     '''
