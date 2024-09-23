@@ -60,6 +60,10 @@ if [[ ! -z "${ghprbPullId}" ]]; then
     (git checkout $LATEST_TAG && git merge $COMMIT) || (git checkout master && git merge $COMMIT) || git checkout -f $COMMIT
 fi
 
+# Temporary hack to use EL9 architecture
+sed -ie "s/CMSSW_11_0_2/CMSSW_14_0_17/g" test/python/WMCore_t/WMRuntime_t/Scripts_t/SetupCMSSWPset_t.py
+sed -ie "s/slc7_amd64_gcc820/el9_amd64_gcc12/g" test/python/WMCore_t/WMRuntime_t/Scripts_t/SetupCMSSWPset_t.py
+
 popd
 
 ### Some tweaks for the nose run (in practice, there is nothing to change in setup_test.py...)
