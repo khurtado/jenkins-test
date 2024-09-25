@@ -19,11 +19,7 @@ mkdir -p $WORKSPACE/srv/wmagent/${WMA_TAG}/config
 
 # secrets
 cp /home/cmsbld/.globus/dmwm-config.tmpl $WORKSPACE/admin/wmagent/WMAgent.secrets
-echo "WMAgent secrets:"
-cat /home/cmsbld/.globus/dmwm-config.tmpl
 cp /home/cmsbld/.globus/dmwm-mariadb.tmpl $WORKSPACE/admin/mariadb/MariaDB.secrets
-echo "MariaDB secrets"
-cat /home/cmsbld/.globus/dmwm-mariadb.tmpl
 cp /home/cmsbld/.globus/*.pem $WORKSPACE/certs
 mv $WORKSPACE/certs/usercert.pem $WORKSPACE/certs/servicecert.pem
 mv $WORKSPACE/certs/userkey.pem $WORKSPACE/certs/servicekey.pem
