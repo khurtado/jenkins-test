@@ -70,8 +70,8 @@ pipeline {
 
                                     echo "Home area and content:"
                                     ls -l /home/cmsbld
-                                    ls -l /home/cmsbld/etc
-                                    ls -ld /home/cmsbld/etc
+                                    #ls -l /home/cmsbld/etc
+                                    #ls -ld /home/cmsbld/etc
 
                                     echo "Setting up workspace directories"
                                     $WORKSPACE/WMCore-Test-Base/setup-env.sh
@@ -82,6 +82,7 @@ pipeline {
                                     echo "Starting containers"
                                     docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d $TEST_SERVICE
                                     sleep 10
+                                    sleep 3600
 
                                     '''
 
