@@ -85,7 +85,6 @@ services:
   wmcore-pr-test:
     <<: *wma-base
     image: registry.cern.ch/cmsweb/wmcore-dev:20240925
-    tty: true
     network_mode: "host"
     environment:
       - ghprbPullId=${ghprbPullId}
@@ -93,7 +92,8 @@ services:
       - MY_ID
       - MY_GROUP
       - BUILD_ID
-    command: ["/bin/bash"]
+    user: root
+    pull_policy: always
     volumes:
       - "/etc/condor:/etc/condor:ro"
       - "/tmp:/tmp"
