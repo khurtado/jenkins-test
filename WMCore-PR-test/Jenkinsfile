@@ -68,6 +68,11 @@ pipeline {
                                     pwd
                                     ls -l
 
+                                    echo "Home area and content:"
+                                    ls -l /home/cmsbld
+                                    ls -l /home/cmsbld/etc
+                                    ls -ld /home/cmsbld/etc
+
                                     echo "Setting up workspace directories"
                                     $WORKSPACE/WMCore-Test-Base/setup-env.sh
 
