@@ -86,7 +86,6 @@ pipeline {
                                     echo "Starting containers"
                                     docker compose -f $WORKSPACE/WMCore-Test-Base/docker-compose.yml up --quiet-pull -d $TEST_SERVICE
                                     sleep 10
-                                    sleep 3600
 
                                     '''
 
