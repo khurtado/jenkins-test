@@ -38,9 +38,9 @@ pipeline {
 
                             TEST_SERVICE = 'wmcore-pr-test'
 
-                            ghprbPullId = '12125'
+                            //ghprbPullId = '12125'
                             //ghprbPullId = "${ghprbPullId}"
-                            ghprbTargetBranch = 'master'
+                            //ghprbTargetBranch = 'master'
 
                             SLICES = 12
                         }
