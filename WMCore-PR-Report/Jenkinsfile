@@ -24,6 +24,7 @@ pipeline {
 
                 copyArtifacts filter: 'artifacts/*.json, artifacts/pep*.txt',
                 fingerprintArtifacts: true,
+                flatten: true,
                 projectName: 'WMCore-PR-pylint',
                 selector: specific('298')
 
@@ -47,11 +48,9 @@ pipeline {
         stage('Compare tests') {
             steps {
                 sh '''
-                git clone https://github.com/dmwm/WMCore code
-
                 echo "$(TZ=GMT date): generating PR report..."
 
-                JENKSIN_JINJA_TEMPLATE_PATH=$WORKSPACE/docker/wmcore-dev/templates \
+                JENKINS_JINJA_TEMPLATE_PATH=$WORKSPACE/docker/wmcore-dev/templates \
                 $WORKSPACE/bin/python $WORKSPACE/docker/wmcore-dev/ContainerScripts/PullRequestReport.py
                 '''
             }
