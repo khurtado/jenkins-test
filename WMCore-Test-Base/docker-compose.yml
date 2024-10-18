@@ -95,6 +95,7 @@ services:
       - MY_ID
       - MY_GROUP
       - BUILD_ID
+      - DMWMBOT_TOKEN
     user: root
     pull_policy: always
     volumes:
