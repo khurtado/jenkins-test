@@ -47,7 +47,7 @@ pipeline {
                 '''
             }
         }
-        stage('Compare tests') {
+        stage('Generate Reports') {
             steps {
                 sh '''
                 echo "$(TZ=GMT date): generating PR report..."
@@ -61,11 +61,7 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'code/LatestTag, LatestUnitTests/*/nosetestspy3*.xml', followSymlinks: false
-
-            junit testResults: 'artifacts/PullRequestReport.html',
-            skipPublishingChecks: true,
-            stdioRetention: ''
+            archiveArtifacts artifacts: 'artifacts/PullRequestReport.html', followSymlinks: false
 
             cleanWs()
         }
