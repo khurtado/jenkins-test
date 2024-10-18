@@ -41,6 +41,8 @@ pipeline {
                 python3 -m venv .
                 $WORKSPACE/bin/pip install jinja2 xunitparser PyGithub
 
+                mkdir -p $WORKSPACE/artifacts
+
                 ls $WORKSPACE
                 '''
             }
