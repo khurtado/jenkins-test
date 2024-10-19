@@ -14,7 +14,7 @@ pipeline {
             steps {
                 cleanWs()
 
-                git branch: 'main', poll: false, url: 'https://github.com/d-ylee/jenkins-test'
+                git branch: 'main', poll: false, url: 'https://github.com/khurtado/jenkins-test'
 
                 sh '''
                 echo "$(TZ=GMT date): Job name is $JOB_NAME"
@@ -36,7 +36,7 @@ pipeline {
         stage('Copy artifacts') {
             copyArtifacts filter: 'artifacts/nosetest*.xml',
             fingerprintArtifacts: true,
-            projectName: 'WMCore-Unittest-Baseline-khurtado',
+            projectName: 'WMCore-Unittest-Baseline-khurtado2',
             selector: lastSuccessful(),
             target: 'MasterUnitTests'
 
@@ -44,12 +44,12 @@ pipeline {
             fingerprintArtifacts: true,
             flatten: true,
             projectName: 'WMCore-PR-pylint',
-            selector: downstream() 
+            selector: specific("${env.TRIGGERED_BUILD_NUMBER_WMCore_PR_pylint}")
 
             copyArtifacts filter: 'artifacts/nosetest*.xml',
             fingerprintArtifacts: true,
             projectName: 'WMCore-PR-Test-khurtado',
-            selector: specific('293'),
+            selector: specific("${env.TRIGGERED_BUILD_NUMBER_WMCore_PR_Test_khurtado}"),
             target: 'LatestUnitTests'
         }
         stage('Generate Reports') {
