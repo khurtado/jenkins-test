@@ -16,6 +16,25 @@ pipeline {
 
                 git branch: 'main', poll: false, url: 'https://github.com/khurtado/jenkins-test'
 
+                copyArtifacts filter: 'artifacts/nosetest*.xml',
+                fingerprintArtifacts: true,
+                projectName: 'WMCore-Unittest-Baseline-khurtado2',
+                selector: lastSuccessful(),
+                target: 'MasterUnitTests'
+
+                copyArtifacts filter: 'artifacts/*.json, artifacts/pep*.txt',
+                fingerprintArtifacts: true,
+                flatten: true,
+                projectName: 'WMCore-PR-pylint',
+                selector: specific("${env.TRIGGERED_BUILD_NUMBER_WMCore_PR_pylint}")
+
+                copyArtifacts filter: 'artifacts/nosetest*.xml',
+                fingerprintArtifacts: true,
+                projectName: 'WMCore-PR-Test-khurtado',
+                selector: specific("${env.TRIGGERED_BUILD_NUMBER_WMCore_PR_Test_khurtado}"),
+                target: 'LatestUnitTests'
+
+
                 sh '''
                 echo "$(TZ=GMT date): Job name is $JOB_NAME"
 
@@ -28,29 +47,6 @@ pipeline {
                 ls $WORKSPACE
                 '''
             }
-        }
-        stage('Trigger Pylint') {
-            build job: 'WMCore-PR-pylint',
-            parameters: [string(name: 'ghprbPullId', value: ${ghprbPullId}), string(name: 'ghprbTargetBranch', value: ${ghprbTargetBranch})]
-        }
-        stage('Copy artifacts') {
-            copyArtifacts filter: 'artifacts/nosetest*.xml',
-            fingerprintArtifacts: true,
-            projectName: 'WMCore-Unittest-Baseline-khurtado2',
-            selector: lastSuccessful(),
-            target: 'MasterUnitTests'
-
-            copyArtifacts filter: 'artifacts/*.json, artifacts/pep*.txt',
-            fingerprintArtifacts: true,
-            flatten: true,
-            projectName: 'WMCore-PR-pylint',
-            selector: specific("${env.TRIGGERED_BUILD_NUMBER_WMCore_PR_pylint}")
-
-            copyArtifacts filter: 'artifacts/nosetest*.xml',
-            fingerprintArtifacts: true,
-            projectName: 'WMCore-PR-Test-khurtado',
-            selector: specific("${env.TRIGGERED_BUILD_NUMBER_WMCore_PR_Test_khurtado}"),
-            target: 'LatestUnitTests'
         }
         stage('Generate Reports') {
             steps {
