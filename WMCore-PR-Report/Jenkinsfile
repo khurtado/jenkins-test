@@ -26,12 +26,12 @@ pipeline {
                 fingerprintArtifacts: true,
                 flatten: true,
                 projectName: 'WMCore-PR-pylint',
-                selector: specific("${env.TRIGGERED_BUILD_NUMBER_WMCore_PR_pylint}")
+                selector: specific("${TRIGGERED_BUILD_NUMBER_WMCore_PR_pylint}")
 
                 copyArtifacts filter: 'artifacts/nosetest*.xml',
                 fingerprintArtifacts: true,
                 projectName: 'WMCore-PR-Test-khurtado',
-                selector: specific("${env.TRIGGERED_BUILD_NUMBER_WMCore_PR_Test_khurtado}"),
+                selector: specific("${TRIGGERED_BUILD_NUMBER_WMCore_PR_Test_khurtado}"),
                 target: 'LatestUnitTests'
 
 
