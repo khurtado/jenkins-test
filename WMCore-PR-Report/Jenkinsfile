@@ -30,27 +30,31 @@ pipeline {
             }
         }
         stage('Trigger Pylint') {
-            build job: 'WMCore-PR-pylint',
-            parameters: [string(name: 'ghprbPullId', value: ${ghprbPullId}), string(name: 'ghprbTargetBranch', value: ${ghprbTargetBranch})]
+            steps {
+                build job: 'WMCore-PR-pylint',
+                parameters: [string(name: 'ghprbPullId', value: ${ghprbPullId}), string(name: 'ghprbTargetBranch', value: ${ghprbTargetBranch})]
+            }
         }
         stage('Copy artifacts') {
-            copyArtifacts filter: 'artifacts/nosetest*.xml',
-            fingerprintArtifacts: true,
-            projectName: 'WMCore-Unittest-Baseline-khurtado',
-            selector: lastSuccessful(),
-            target: 'MasterUnitTests'
+            steps {
+                copyArtifacts filter: 'artifacts/nosetest*.xml',
+                fingerprintArtifacts: true,
+                projectName: 'WMCore-Unittest-Baseline-khurtado',
+                selector: lastSuccessful(),
+                target: 'MasterUnitTests'
 
-            copyArtifacts filter: 'artifacts/*.json, artifacts/pep*.txt',
-            fingerprintArtifacts: true,
-            flatten: true,
-            projectName: 'WMCore-PR-pylint',
-            selector: downstream() 
+                copyArtifacts filter: 'artifacts/*.json, artifacts/pep*.txt',
+                fingerprintArtifacts: true,
+                flatten: true,
+                projectName: 'WMCore-PR-pylint',
+                selector: downstream() 
 
-            copyArtifacts filter: 'artifacts/nosetest*.xml',
-            fingerprintArtifacts: true,
-            projectName: 'WMCore-PR-Test-khurtado',
-            selector: specific('293'),
-            target: 'LatestUnitTests'
+                copyArtifacts filter: 'artifacts/nosetest*.xml',
+                fingerprintArtifacts: true,
+                projectName: 'WMCore-PR-Test-khurtado',
+                selector: specific('293'),
+                target: 'LatestUnitTests'
+            }
         }
         stage('Generate Reports') {
             steps {
