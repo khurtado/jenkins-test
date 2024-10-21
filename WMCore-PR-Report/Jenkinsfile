@@ -31,8 +31,23 @@ pipeline {
         }
         stage('Trigger Pylint') {
             steps {
-                build job: 'WMCore-PR-pylint',
-                parameters: [string(name: 'ghprbPullId', value: env.ghprbPullId), string(name: 'ghprbTargetBranch', value: env.ghprbTargetBranch)]
+                script {
+                    def built = build(
+                        job: 'WMCore-PR-pylint',
+                        parameters: [
+                            string(name: 'ghprbPullId', value: "${env.ghprbPullId}"),
+                            string(name: 'ghprbTargetBranch', value: "${env.ghprbTargetBranch}")
+                        ]
+                    )
+
+                    copyArtifacts(
+                        filter: 'artifacts/*.json, artifacts/pep*.txt',
+                        fingerprintArtifacts: true,
+                        flatten: true,
+                        projectName: 'WMCore-PR-pylint',
+                        selector: specific("${built.number}") 
+                    )
+                }
             }
         }
         stage('Copy artifacts') {
@@ -42,12 +57,6 @@ pipeline {
                 projectName: 'WMCore-Unittest-Baseline-khurtado',
                 selector: lastSuccessful(),
                 target: 'MasterUnitTests'
-
-                copyArtifacts filter: 'artifacts/*.json, artifacts/pep*.txt',
-                fingerprintArtifacts: true,
-                flatten: true,
-                projectName: 'WMCore-PR-pylint',
-                selector: downstream() 
 
                 copyArtifacts filter: 'artifacts/nosetest*.xml',
                 fingerprintArtifacts: true,
