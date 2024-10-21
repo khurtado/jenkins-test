@@ -14,12 +14,7 @@ pipeline {
             steps {
                 cleanWs()
 
-                git branch: 'main', poll: false, url: 'https://github.com/khurtado/jenkins-test'
-
-                sh '''
-                echo "My environment is:"
-                env
-                '''
+                git branch: 'wmcore-pr-report', poll: false, url: 'https://github.com/khurtado/jenkins-test'
 
                 copyArtifacts filter: 'artifacts/nosetest*.xml',
                 fingerprintArtifacts: true,
