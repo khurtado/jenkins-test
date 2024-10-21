@@ -32,7 +32,7 @@ pipeline {
         stage('Trigger Pylint') {
             steps {
                 build job: 'WMCore-PR-pylint',
-                parameters: [string(name: 'ghprbPullId', value: ${ghprbPullId}), string(name: 'ghprbTargetBranch', value: ${ghprbTargetBranch})]
+                parameters: [string(name: 'ghprbPullId', value: env.ghprbPullId), string(name: 'ghprbTargetBranch', value: env.ghprbTargetBranch)]
             }
         }
         stage('Copy artifacts') {
