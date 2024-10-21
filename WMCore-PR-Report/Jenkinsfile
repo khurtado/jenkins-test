@@ -1,7 +1,7 @@
 pipeline {
     agent {
         label 'cms-dmwm-el9'
-    }
+   }
 
     environment {
         CODE_REPO = "WMCore"
@@ -32,6 +32,10 @@ pipeline {
         stage('Trigger downstream PR tests') {
             parallel {
                 stage('Trigger pylint') {
+                    agent {
+                        label 'cms-dmwm-el9'
+                    }
+
                     steps {
                         script {
                             def builtPylint = build(
@@ -53,6 +57,10 @@ pipeline {
                     }
                 }
                 stage('Trigger unittests') {
+                    agent {
+                        label 'cms-dmwm-el9'
+                    }
+
                     steps {
                         script {
                             def builtTest = build(
