@@ -27,6 +27,7 @@ pipeline {
                 flatten: true,
                 projectName: 'WMCore-PR-pylint',
                 selector: specific(params.TRIGGERED_BUILD_NUMBER_WMCore_PR_pylint)
+                target: 'LatestPylint'
 
                 copyArtifacts filter: 'artifacts/nosetest*.xml',
                 fingerprintArtifacts: true,
