@@ -57,6 +57,7 @@ pipeline {
                         script {
                             def builtTest = build(
                                 job: 'WMCore-PR-Test-khurtado',
+                                propagate: false,
                                 parameters: [
                                     string(name: 'ghprbPullId', value: "${env.ghprbPullId}"),
                                     string(name: 'ghprbTargetBranch', value: "${env.ghprbTargetBranch}")
