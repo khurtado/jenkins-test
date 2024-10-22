@@ -98,8 +98,12 @@ def buildPylintReport(templateEnv, fileName="pylintpy3Report.json"):
                 else:
                     comments += 1
             if report[filename]['test'].get('score', None):
+                if 'base' in report[filename]:
+                    base_score = report[filename]['base'].get('score', 0)
+                else:
+                    base_score = 0
                 if float(report[filename]['test']['score']) < 9 and (float(report[filename]['test']['score']) <
-                                                                     float(report[filename]['base'].get('score', 0))):
+                                                                     float(base_score)):
                     failed = True
                 elif float(report[filename]['test']['score']) < 8:
                     failed = True
