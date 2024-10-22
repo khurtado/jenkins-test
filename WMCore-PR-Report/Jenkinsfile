@@ -99,11 +99,11 @@ pipeline {
                 projectName: 'WMCore-Unittest-Baseline-khurtado',
                 selector: lastSuccessful(),
                 target: 'MasterUnitTests'
-            }
 
-            sh '''
-            ls $WORKSPACE/MasterUnitTests
-            '''
+                sh '''
+                ls $WORKSPACE/MasterUnitTests
+                '''
+            }
         }
         stage('Generate Reports') {
             steps {
