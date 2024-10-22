@@ -8,7 +8,7 @@ from github import Github
 
 try:
     token = os.environ['DMWMBOT_TOKEN2']
-    print('DMWMBOT_TOKEN2 was defined')
+    print(f'DMWMBOT_TOKEN2 was defined, head={token[:3]}, tail={token[-3:]}')
 except KeyError:
     print('DMWMBOT_TOKEN2 was not defined')
 
