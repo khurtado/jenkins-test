@@ -10,7 +10,7 @@ pipeline {
         CODE_REPO = "WMCore"
         WMCORE_REPO = "dmwm"
         TargetIssueID = "0"
-        DMWMBOT_TOKEN2 = credentials('d0bc4ba6-d9c5-4668-9839-1b7ff6f795fe')
+        DMWMBOT_TOKEN = credentials('d0bc4ba6-d9c5-4668-9839-1b7ff6f795fe')
     }
 
     stages {

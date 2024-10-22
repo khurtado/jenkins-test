@@ -7,16 +7,9 @@ import time
 from github import Github
 
 try:
-    token = os.environ['DMWMBOT_TOKEN2']
-    print(f'DMWMBOT_TOKEN2 was defined, head={token[:3]}, tail={token[-3:]}')
-except KeyError:
-    print('DMWMBOT_TOKEN2 was not defined')
-
-try:
     gh = Github(os.environ['DMWMBOT_TOKEN'])
 except KeyError:
     print('DMWMBOT_TOKEN not defined. Not updating PR')
-    sys.exit()
 
 codeRepo = os.environ.get('CODE_REPO', 'WMCore')
 teamName = os.environ.get('WMCORE_REPO', 'dmwm')
@@ -38,5 +31,10 @@ issue = repo.get_issue(int(issueID))
 reportURL = os.environ['BUILD_URL']
 
 lastCommit = repo.get_pull(int(issueID)).get_commits().get_page(0)[-1]
+
+sys.exit()
+
+'''
 lastCommit.create_status(state='pending', target_url=reportURL,
                          description='Tests started at ' + time.strftime("%d %b %Y %H:%M GMT"))
+'''

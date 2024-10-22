@@ -343,7 +343,7 @@ if __name__ == '__main__':
         if pycodestyleReport:
             html.write(pycodestyleReport)
 
-    reportToGithub(py3UnitTestSummary, py3FailedUnitTests, pylintSummaryPy3, failedPylintPy3, pycodestyleSummary)
+    # reportToGithub(py3UnitTestSummary, py3FailedUnitTests, pylintSummaryPy3, failedPylintPy3, pycodestyleSummary)
 
     if pylintSummaryPy3:
         if failedPylintPy3:
