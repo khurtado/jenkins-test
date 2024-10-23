@@ -271,7 +271,7 @@ def reportToGithub(py3UnitTestSummary,
     if py3UnitTestSummary:  # Most of the repositories do not yet have python3 unit tests
         message += (
             f' * Python3 Unit tests: '
-            f'{statusMap[py3FailedUnitTests]['readStatus']}\n'
+            f'{statusMap[py3FailedUnitTests]["readStatus"]}\n'
         )
         if failures := py3UnitTestSummary['newFailures']:
             message += f'   * {failures} new failures\n'
@@ -287,7 +287,7 @@ def reportToGithub(py3UnitTestSummary,
     if pylintSummaryPy3:
         message += (
             f' * Python3 Pylint check: '
-            f'{statusMap[failedPylintPy3]['readStatus']}\n'
+            f'{statusMap[failedPylintPy3]["readStatus"]}\n'
         )
         if pylintFails := pylintSummaryPy3['failures']:
             message += (
@@ -304,7 +304,7 @@ def reportToGithub(py3UnitTestSummary,
 
     message += (
         f' * Pycodestyle check: '
-        f'{statusMap[failedPycodestyle]['readStatus']}\n'
+        f'{statusMap[failedPycodestyle]["readStatus"]}\n'
     )
     if comments := pycodestyleSummary['comments']:
         message += f'   * {comments} comments to review\n'
