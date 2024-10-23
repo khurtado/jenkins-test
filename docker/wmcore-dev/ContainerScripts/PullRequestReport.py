@@ -311,7 +311,7 @@ def reportToGithub(py3UnitTestSummary,
 
     message += f"\nDetails at {reportURL}\n"
 
-    if issueID == 12151:
+    if issueID == '12151':
         # GitHub PRs and Issues share the same number pool,
         # so there won't be a PR with the same number as an issue
         status = issue.create_comment(message)
