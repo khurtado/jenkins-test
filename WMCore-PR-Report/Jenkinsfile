@@ -28,18 +28,14 @@ pipeline {
                 $WORKSPACE/bin/pip install jinja2 xunitparser PyGithub
 
                 mkdir -p $WORKSPACE/artifacts
-
-                ls $WORKSPACE
                 '''
             }
         }
         stage('Update GitHub PR status') {
             steps {
-
                 sh '''
                 $WORKSPACE/bin/python $WORKSPACE/docker/wmcore-dev/ContainerScripts/PullRequestTestBegin.py
                 '''
-
             }
         }
         stage('Trigger downstream PR tests') {
